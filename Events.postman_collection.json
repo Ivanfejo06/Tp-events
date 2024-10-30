@@ -1,0 +1,342 @@
+{
+	"info": {
+		"_postman_id": "fe9a4253-1141-4127-9415-bd401ce270bf",
+		"name": "TP-Events",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "http://localhost:3000/api/user/login",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"luca@gmail.com\", \r\n    \"password\": \"luclis171\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/user/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:3000/api/user/register",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"luca@gmail.com\", \r\n    \"password\": \"luclis171\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/user/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Events",
+			"item": [
+				{
+					"name": "http://localhost:3000/api/event",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/event",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"event"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Toto",
+									"disabled": true
+								},
+								{
+									"key": "category",
+									"value": "Recitales",
+									"disabled": true
+								},
+								{
+									"key": "start_date",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "tag",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:3000/api/event/id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/event/8",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"event",
+								"8"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Province",
+			"item": [
+				{
+					"name": "http://localhost:3000/api/province/id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/province/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"province",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:3000/api/province",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzEsImZpcnN0X25hbWUiOiJMdWNhIiwibGFzdF9uYW1lIjoiTGlzdGluZ2FydCBNYWVrYW5laGlzYSIsInVzZXJuYW1lIjoibHVjYUBnbWFpbC5jb20iLCJwYXNzd29yZCI6Imx1Y2xpczE3MSIsImlhdCI6MTcxNzA3ODQ0NSwiZXhwIjoxNzE3MDc4NTMxLCJhdWQiOlsiaHR0cDovL2xvY2FsaG9zdC8iXSwiaXNzIjoiTWkgb3JnYW5pemFjaW9uIiwic3ViIjoiNzEifQ.YuqOZJuMHwgiyLBWQKx59OQ-LRXjokIX8cvFCNXRu7M",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/province",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"province"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:3000/api/province/1 Copy 3",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Lishii\",\r\n    \"full_name\":\"Vireinado de Lifschitz\",\r\n    \"latitude\":\"-69.213456789213451\",\r\n    \"longitude\":\"42.61446691796875\",\r\n    \"display_order\":null\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/province/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"province",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:3000/api/province/1 Copy 4",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Lishii\",\r\n    \"full_name\":\"Vireinado de Lifschitz\",\r\n    \"latitude\":\"-69.213456789213451\",\r\n    \"longitude\":\"42.61446691796875\",\r\n    \"display_order\":null,\r\n    \"id\":1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/province/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"province",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:3000/api/province/1",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/province/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"province",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
