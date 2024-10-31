@@ -125,8 +125,8 @@ export default class EventRepository
         let returnArray = null;
         const sql = `
         Insert into events(name, description, id_event_category, id_event_location, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance, id_creator_user)
-        Values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`;
-        const values = [entity.name, entity.description, entity.id_event_category, entity.id_event_location, entity.start_date, entity.duration_in_minutes, entity.price, entity.enabled_for_enrollment, entity.max_assistance, entity.id_creator_user]
+        Values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`;
+        const values = [entity.name, entity.description, entity.id_event_category, entity.id_event_location, entity.start_date, entity.duration_in_minutes, entity.price, 0, entity.max_assistance, entity.id_creator_user]
         returnArray = DBHelper.requestCount(sql, values);
         return returnArray;
     }

@@ -3,7 +3,7 @@ import cors from "cors";
 import EventRouter from "./src/controllers/Event_controller.js";
 import ProvinceRouter from "./src/controllers/Province_controller.js";
 import UserRouter from "./src/controllers/Users_controller.js";
-import Event_CategoriesRouter from './src/controllers/Categories_controller.js';
+import Event_CategoriesRouter from './src/controllers/Event_categories_controller.js';
 import Event_LocationsRouter from './src/controllers/Event_locations_controller.js';
 import Event_TagsRouter from './src/controllers/Event_tags_controller.js';
 

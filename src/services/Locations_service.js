@@ -1,4 +1,4 @@
-import LocationsRepository from '../repositories/locations-repositories.js';
+import LocationsRepository from '../repositories/Locations_repository.js';
 
 const repo = new LocationsRepository();
 
@@ -33,6 +33,15 @@ export default class LocationsServices {
         } catch (error) {
             console.error(`Error al obtener las ubicaciones del evento con ID ${id}:`, error);
             throw new Error(`Error al obtener las ubicaciones del evento con ID ${id}`);
+        }
+    }
+    async getMaxCapacity(id) {
+        try {
+            const result = await repo.getMaxCapacity(id);
+            return result || null;
+        } catch (error) {
+            console.error(`Error al obtener la max capacity con ID ${id}:`, error);
+            throw new Error(`Error al obtener la max capacity con ID ${id}`);
         }
     }
 }

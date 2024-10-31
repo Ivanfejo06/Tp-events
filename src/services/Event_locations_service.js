@@ -24,4 +24,14 @@ export default class Event_locationServices {
             throw new Error(`Error al buscar locación con ID ${id}`);
         }
     }
+
+    async getMaxCapacity(id) {
+        try {
+            const result = await repo.getMaxCapacity(id);
+            return result[0].max_capacity || null;
+        } catch (error) {
+            console.error(`Error al buscar locación con ID ${id}:`, error);
+            throw new Error(`Error al buscar locación con ID ${id}`);
+        }
+    }
 }

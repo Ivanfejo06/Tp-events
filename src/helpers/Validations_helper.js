@@ -2,12 +2,15 @@ export default class ValidationHelper
 {
     //valida int
     validarInt = (data) => {
-        if(data.parseInt())
-        {
+        // Verifica si data es un número y si es un entero
+        if (typeof data === 'number' && Number.isInteger(data)) {
             return true;
         }
-        else return false;
-    }
+        
+        // Si no es un número o no es un entero, intenta convertirlo a entero
+        const parsed = parseInt(data, 10);
+        return !isNaN(parsed) && Number.isInteger(parsed);
+    }    
 
     //validar string sin numeros
     validarString(s) {
@@ -16,13 +19,8 @@ export default class ValidationHelper
     }
 
     //validar Mail
-    validarMail = (data) =>
-    {
+    validarMail = (data) => {
         const mail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!mail.test(data))
-        {
-            return true;
-        }
-        else return false;
-    }
+        return mail.test(data); // Devuelve true si es válido, false si no lo es
+    };    
 }

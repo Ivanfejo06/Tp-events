@@ -9,12 +9,7 @@ export default class UsersRepository
         let returnArray = null;
         const KEY = 'claveToken';
         try
-        {
-            const login =
-            {
-                username: entity.username,
-                password: entity.password
-            };
+        {  
             const options =
             {
                 expiresIn: '1h'
@@ -23,6 +18,12 @@ export default class UsersRepository
             const values = [entity.username, entity.password];
             
             const consulta = await DBHelper.requestOne(sql, values);
+            const login =
+            {
+                username: entity.username,
+                password: entity.password,
+                id: consulta.id,
+            };
             if(consulta && consulta.username === entity.username)
             {
                 const token = jwt.sign(login, KEY, options);

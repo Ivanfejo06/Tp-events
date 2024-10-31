@@ -3,9 +3,11 @@ import EventServices from '../services/Event_service.js';
 import Event_enrollmentServices from '../services/Event_enrollments_service.js';
 import ValidationHelper from '../helpers/Validations_helper.js';
 import AuthMiddleware from '../middleware/Auth_middleware.js';
+import Event_locationServices from '../services/Event_locations_service.js';
 
 const router = Router();
 const svc = new EventServices();
+const lsvc = new Event_locationServices();
 const VHelper = new ValidationHelper();
 const Auth = new AuthMiddleware();
 
@@ -48,26 +50,36 @@ router.get('/:id/enrollment', async (req, res) => {
 });
 
 // Crear evento
-router.post('', async (req, res) => {
+router.post('', Auth.AuthMiddleware, async (req, res) => {
     try {
-        if (Auth.authenticationToken(req.token)) {
-            const entity = req.body;
-            const maxCapacity = await svc.getMaxCapacity(entity.id_location);
+        console.log('Solicitud recibida para crear un evento:', req.body);
 
-            if (!VHelper.fullLetters(entity.name) || !VHelper.validarString(entity.descripcion)) {
-                return res.status(400).send('El nombre o descripción están vacíos o tienen menos de tres letras');
-            } else if (entity.max_assistance > maxCapacity) {
-                return res.status(400).send('La asistencia máxima excede la capacidad del lugar');
-            } else if (!VHelper.validarInt(entity.price) || !VHelper.validarInt(entity.duration_in_minutes)) {
-                return res.status(400).send('El precio o duración no son válidos');
-            }
+        const entity = req.body;
+        // Agregar el id_creator_user a la entidad
+        entity.id_creator_user = req.user.id; // Asegúrate de que req.user.id esté disponible
 
-            const newEvent = await svc.createAsync(entity);
-            return res.status(201).json(newEvent);
+        const maxCapacity = await lsvc.getMaxCapacity(entity.id_event_location);
+        console.log('Capacidad máxima obtenida para la ubicación:', maxCapacity);
+
+        // Validaciones
+        if (!VHelper.validarString(entity.descripcion)) {
+            console.log('Error de validación: nombre o descripción inválidos', entity.name, entity.descripcion);
+            return res.status(400).send('El nombre o descripción están vacíos o tienen menos de tres letras');
+        } else if (entity.max_assistance > maxCapacity) {
+            console.log('Error de validación: asistencia máxima excede la capacidad del lugar', entity.max_assistance);
+            return res.status(400).send('La asistencia máxima excede la capacidad del lugar');
+        } else if (!VHelper.validarInt(entity.price) || !VHelper.validarInt(entity.duration_in_minutes)) {
+            console.log('Error de validación: precio o duración no válidos', entity.price, entity.duration_in_minutes);
+            return res.status(400).send('El precio o duración no son válidos');
         }
-        return res.status(401).send('Unauthorized');
+
+        // Creación del evento
+        const newEvent = await svc.createAsync(entity);
+        console.log('Nuevo evento creado:', newEvent);
+
+        return res.status(201).json(newEvent);
     } catch (error) {
-        console.error(error);
+        console.error('Error interno al crear el evento:', error);
         return res.status(500).send('Error interno');
     }
 });

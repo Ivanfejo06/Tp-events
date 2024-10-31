@@ -21,4 +21,13 @@ export default class Event_locationRepository
        returnArray = DBHelper.requestValues(sql, values);
        return returnArray;
    }
+
+   getMaxCapacity = async (id) =>
+    {
+        let returnArray = null;
+        const sql = `SELECT max_capacity FROM event_locations where id = $1`;
+        const values = [id];
+        returnArray = DBHelper.requestValues(sql, values);
+        return returnArray;
+    }
 }

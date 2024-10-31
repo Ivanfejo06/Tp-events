@@ -10,7 +10,7 @@ const Auth = new AuthMiddleware();
 const svc = new Event_categoriesServices();
 
 // Ruta para obtener todas las categorías
-router.get('', Auth.AuthMiddleware, async (req, res) => {
+router.get('', async (req, res) => {
     try {
         const categories = await svc.getAllAsync();
         if (categories) return res.status(200).json(categories);
