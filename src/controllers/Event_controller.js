@@ -8,6 +8,7 @@ import Event_locationServices from '../services/Event_locations_service.js';
 const router = Router();
 const svc = new EventServices();
 const lsvc = new Event_locationServices();
+const esvc = new Event_enrollmentServices();
 const VHelper = new ValidationHelper();
 const Auth = new AuthMiddleware();
 
@@ -114,7 +115,7 @@ router.delete('/:id', async (req, res) => {
     try {
         if (Auth.authenticationToken(req.token)) {
             const { id } = req.params;
-            const assistance = await Event_enrollmentServices.getAssistanceAsync(id);
+            const assistance = await esvc.getAssistanceAsync(id);
 
             if (assistance == null) {
                 return res.status(400).send('Bad request');
@@ -137,9 +138,9 @@ router.post('/:id/enrollment', async (req, res) => {
             const entity = req.body;
             const { id: id_event } = req.params;
             const eventDetails = await svc.getDetailsEventAsync(id_event);
-            const enrollmentExists = await Event_enrollmentServices.getEnrollmentAsync(id_event, entity.id_user);
+            const enrollmentExists = await esvc.getEnrollmentAsync(id_event, entity.id_user);
             const today = Date.now();
-            const currentAssistance = await Event_enrollmentServices.getAssistanceAsync(id_event);
+            const currentAssistance = await esvc.getAssistanceAsync(id_event);
 
             if (currentAssistance + 1 > eventDetails.max_assistance) {
                 return res.status(400).send('Se excede la capacidad máxima del evento');
@@ -151,7 +152,7 @@ router.post('/:id/enrollment', async (req, res) => {
                 return res.status(400).send('El usuario ya está inscrito');
             }
 
-            const newEnrollment = await Event_enrollmentServices.createAsync(entity);
+            const newEnrollment = await esvc.createAsync(entity);
             return newEnrollment ? res.status(201).json(newEnrollment) : res.status(404).send('No encontrado');
         }
         return res.status(401).send('Unauthorized');
@@ -167,7 +168,7 @@ router.delete('/:id/enrollment', async (req, res) => {
         if (Auth.authenticationToken(req.token)) {
             const { id } = req.params;
             const eventDetails = await svc.getDetailsEventAsync(id);
-            const enrollmentExists = await Event_enrollmentServices.getEnrollmentAsync(id, req.body.id_user);
+            const enrollmentExists = await esvc.getEnrollmentAsync(id, req.body.id_user);
 
             if (!enrollmentExists) {
                 return res.status(400).send('El usuario no está inscrito a este evento');
@@ -175,7 +176,7 @@ router.delete('/:id/enrollment', async (req, res) => {
                 return res.status(400).send('El evento ya empezó o ya terminó');
             }
 
-            const deletedEnrollment = await Event_enrollmentServices.deleteByIdAsync(id);
+            const deletedEnrollment = await esvc.deleteByIdAsync(id);
             return deletedEnrollment ? res.status(200).json(deletedEnrollment) : res.status(404).send('No encontrado');
         }
         return res.status(401).send('Unauthorized');
