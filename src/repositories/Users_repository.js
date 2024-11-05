@@ -31,7 +31,8 @@ export default class UsersRepository
                 {
                     success: true,
                     message: '',
-                    token: token
+                    token: token,
+                    user: login
                 }
                 returnArray = result;
             }
