@@ -25,6 +25,16 @@ export default class EventServices {
         }
     }
 
+    async getAllEventsByUser(id) {
+        try {
+            const result = await repo.getAllEventsByUser(id);
+            return result || null;
+        } catch (error) {
+            console.error(`Error al obtener detalles del evento con ID ${id}:`, error);
+            throw new Error(`Error al obtener detalles del evento con ID ${id}`);
+        }
+    }
+
     // Devolver max_capacity
     async getMaxCapacityAsync(id) {
         try {

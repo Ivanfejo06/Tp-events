@@ -86,6 +86,48 @@ export default class EventRepository
         return returnArray;
     }
 
+    getAllEventsByUser = async (id_creator_user) => {
+        let returnArray = null;
+        let sql = `
+        SELECT
+            E.id, E.name, 
+            E.description,
+            E.start_date,
+            E.duration_in_minutes,
+            E.price,
+            E.enabled_for_enrollment,
+            E.max_assistance, 
+            json_build_object('id', U.id, 'first_name', U.first_name, 'last_name', U.last_name, 'username', U.username, 'password', '*****') As User,
+            json_build_object('id', C.id, 'name', C.name, 'display_order', C.display_order) As Category,
+            json_build_object('id', EL.id, 'id_location', EL.id_location, 'name', EL.name, 'full_address', EL.full_address, 'max_capacity', EL.max_capacity, 'latitude', EL.latitude, 'longitude', EL.longitude, 'id_creator_user', EL.id_creator_user) As Ubication
+        FROM
+            events as E
+            INNER JOIN users as U ON E.id_creator_user = U.id
+            INNER JOIN event_categories AS C ON E.id_event_category = C.id
+            INNER JOIN event_locations AS EL ON E.id_event_location = EL.id
+            LEFT JOIN event_tags AS ET ON E.id = ET.id_event
+            LEFT JOIN tags AS T ON ET.id_tag = T.id
+        WHERE 1=1`;
+    
+        let values = [];
+    
+        // Si el valor de id_creator_user es 'all', no agregamos el filtro
+        if (id_creator_user !== 'all' && id_creator_user) {
+            sql = `${sql} AND E.id_creator_user = $${values.length + 1}`;
+            values.push(id_creator_user);
+        }
+    
+        sql = `${sql} GROUP BY E.id, U.id, C.id, EL.id`;
+    
+        try {
+            returnArray = await DBHelper.requestValues(sql, values);
+            return returnArray;
+        } catch (error) {
+            console.error(`Error al obtener los eventos:`, error);
+            throw new Error('Error al obtener eventos');
+        }
+    };    
+
     //Devolver max_capacity
     getMaxCapacityAsync = async (id) =>
     {

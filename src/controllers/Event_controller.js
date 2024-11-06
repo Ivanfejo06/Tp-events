@@ -37,6 +37,23 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+// Obtener eventos de una persona
+router.get('/all/all', Auth.AuthMiddleware, async (req, res) => {
+    try {
+        // Llamamos al servicio pasando el ID del usuario autenticado
+        const eventDetails = await svc.getAllEventsByUser(req.user.id);
+        
+        // Si no hay eventos, respondemos con un error 404
+        return eventDetails && eventDetails.length > 0 
+            ? res.status(200).json(eventDetails) 
+            : res.status(404).send('No se encontraron eventos');
+    } catch (error) {
+        console.error('Error al obtener los eventos:', error);
+        return res.status(500).send('Error interno');
+    }
+});
+
+
 // Listar participantes
 router.get('/:id/enrollment', async (req, res) => {
     try {
