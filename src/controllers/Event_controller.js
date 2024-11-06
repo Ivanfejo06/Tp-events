@@ -66,7 +66,7 @@ router.post('', Auth.AuthMiddleware, async (req, res) => {
         if (!VHelper.validarString(entity.descripcion)) {
             console.log('Error de validación: nombre o descripción inválidos', entity.name, entity.descripcion);
             return res.status(400).send('El nombre o descripción están vacíos o tienen menos de tres letras');
-        } else if (entity.max_assistance > maxCapacity) {
+        } else if (Number(entity.max_assistance) > Number(maxCapacity)) {
             console.log('Error de validación: asistencia máxima excede la capacidad del lugar', entity.max_assistance);
             return res.status(400).send('La asistencia máxima excede la capacidad del lugar');
         } else if (!VHelper.validarInt(entity.price) || !VHelper.validarInt(entity.duration_in_minutes)) {
@@ -140,9 +140,14 @@ router.delete('/:id', Auth.AuthMiddleware, async (req, res) => {
     try {
         const { id } = req.params;
         const assistance = await esvc.getAssistanceAsync(id);
+        const evento = await svc.getDetailsEventAsync(id);
 
-        if (assistance == null) {
+        if (req.user.id == evento.id_creator_user) {
             return res.status(400).send('Bad request');
+        }
+
+        if (assistance > 0) {
+            return res.status(400).send('Bad request: Event not empty');
         }
 
         const deletedEvent = await svc.deleteByIdAsync(id);

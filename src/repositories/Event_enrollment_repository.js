@@ -95,7 +95,7 @@ export default class Event_enrollmentsRepository
     {
         let returnArray = null;
         let sql = `
-        SELECT Distinct 
+        SELECT  
             *
         FROM 
             event_enrollments
