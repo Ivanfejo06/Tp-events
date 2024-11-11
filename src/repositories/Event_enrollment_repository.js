@@ -80,9 +80,8 @@ export default class Event_enrollmentsRepository
             WHERE
                 id_event = $1 AND id_user = $2`;
         const values = [id_event, id_user];
-    
         try {
-            const result = await DBHelper.requestOne(sql, values);
+            const result = await DBHelper.requestValues(sql, values);
             return result; // Devuelve el primer resultado o null si no hay resultados
         } catch (error) {
             console.error('Error en getEnrollmentAsync:', error);

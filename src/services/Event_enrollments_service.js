@@ -29,6 +29,7 @@ export default class Event_enrollmentService {
     async getEnrollmentAsync(id_event, id_user) {
         try {
             const result = await repo.getEnrollmentAsync(id_event, id_user);
+            console.log(result)
             return result || null;
         } catch (error) {
             console.error(`Error al buscar la inscripción del evento ${id_event} para el usuario ${id_user}:`, error);

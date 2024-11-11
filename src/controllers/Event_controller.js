@@ -102,45 +102,21 @@ router.post('', Auth.AuthMiddleware, async (req, res) => {
     }
 });
 
-// Crear evento
-router.post('', Auth.AuthMiddleware, async (req, res) => {
-    try {
-        console.log('Solicitud recibida para crear un evento:', req.body);
-
-        const entity = req.body;
-        entity.id_creator_user = req.user.id; // Usar id del usuario autenticado
-
-        const maxCapacity = await svc.getMaxCapacity(entity.id_event_location);
-        console.log('Capacidad máxima obtenida para la ubicación:', maxCapacity);
-
-        // Validaciones
-        if (!VHelper.validarString(entity.descripcion)) {
-            return res.status(400).send('El nombre o descripción están vacíos o tienen menos de tres letras');
-        } else if (entity.max_assistance > maxCapacity) {
-            return res.status(400).send('La asistencia máxima excede la capacidad del lugar');
-        } else if (!VHelper.validarInt(entity.price) || !VHelper.validarInt(entity.duration_in_minutes)) {
-            return res.status(400).send('El precio o duración no son válidos');
-        }
-
-        const newEvent = await svc.createAsync(entity);
-        return res.status(201).json(newEvent);
-    } catch (error) {
-        console.error('Error interno al crear el evento:', error);
-        return res.status(500).send('Error interno');
-    }
-});
-
 // Modificar evento
 router.put('', Auth.AuthMiddleware, async (req, res) => {
     try {
         const entity = req.body;
-        const maxCapacity = await svc.getMaxCapacityAsync(entity.id_location);
+        console.log(entity)
+        const maxCapacity = await lsvc.getMaxCapacity(entity.id_event_location);
 
         if (!VHelper.validarString(entity.name) || !VHelper.validarString(entity.descripcion)) {
+            console.log("mes")
             return res.status(400).send('El nombre o descripción están vacíos o tienen menos de tres letras');
         } else if (entity.max_assistance > maxCapacity) {
+            console.log("mesa")
             return res.status(400).send('La asistencia máxima excede la capacidad del lugar');
         } else if (!VHelper.validarInt(entity.price) || !VHelper.validarInt(entity.duration_in_minutes)) {
+            console.log("mese")
             return res.status(400).send('El precio o duración no son válidos');
         }
 
@@ -210,14 +186,12 @@ router.post('/:id/enrollment', Auth.AuthMiddleware, async (req, res) => {
 // Eliminar inscripción
 router.delete('/:id/enrollment', Auth.AuthMiddleware, async (req, res) => {
     try {
-        const { id } = req.params;
-        const enrollmentExists = await esvc.getEnrollmentAsync(id, req.user.id);
+        const enrollmentExists = await esvc.getEnrollmentAsync(req.params.id, req.user.id);
 
         if (!enrollmentExists) {
-            return res.status(400).send('El usuario no está inscrito a este evento');
+            return res.status(400).send('El usuario no está inscripto a este evento');
         }
-
-        const deletedEnrollment = await esvc.deleteByIdAsync(id);
+        const deletedEnrollment = await esvc.deleteByIdAsync(enrollmentExists[0].id);
         return deletedEnrollment ? res.status(200).json(deletedEnrollment) : res.status(404).send('No encontrado');
     } catch (error) {
         console.error(error);
